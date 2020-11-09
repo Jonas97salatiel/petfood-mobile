@@ -14,40 +14,63 @@ export default StyleSheet.create({
 
     },
 
-    iconNavigation:{
+    headerNavigation:{
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: "center",
         width: '100%',
-        alignItems: "flex-start",
-        paddingLeft: 15,
     },
 
     logo:{
-        marginTop: '40%',
-        marginBottom: '20%',
+
+        resizeMode: 'contain',
+        height: 30,
+    },
+
+    formContainer:{
+        backgroundColor: '#fff',
+        flex: 5,
+        width: '100%',
+        borderTopLeftRadius: 35,
+        borderTopRightRadius: 35,
+        borderTopWidth: 3,
+        borderColor: '#D3A92C',
+        
         
     },
 
-    styleForm:{
-      
+    tituloForm:{
         width: '100%',
+        fontSize: 24,
+        marginBottom: 20,
+        marginTop: 20,
+        textAlign: 'center'
+ 
+    },
+
+    styleForm:{
+        flexDirection: 'column',
+        justifyContent: "flex-end",
+        width: '100%',
+        marginTop: 10,
+        
     },
 
     textInputLogin:{
-        width: '100%',
+        width: '95%',
         height: 60,
-        backgroundColor: '#F8C733',
         borderColor: 'gray',
-        borderBottomWidth: 1,
-        borderBottomColor: '#564848',
+        borderBottomWidth: 2,
+        borderBottomColor: '#E5E5E5',
         paddingLeft: 15,
-        marginBottom: 10,
+        margin: 5, 
 
     },
 
-    buttonRecuperarSenha:{
+    descPassword:{
 
-        marginTop: '8%',
-        marginBottom: '8%',
-        marginLeft: '30%'
+        padding: 10,
 
     },
 

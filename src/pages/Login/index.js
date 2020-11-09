@@ -1,15 +1,17 @@
 import React, { useRef} from 'react';
-import { Button, Text , Image, View, TouchableOpacity} from 'react-native';
+import { Text , Image, View, TouchableOpacity} from 'react-native';
 import * as Yup from 'yup';
 import styles from './style';
 import { Form } from '@unform/mobile';
+import Icon from 'react-native-vector-icons/FontAwesome'
+import { NavigationContainer } from '@react-navigation/native';
 
 
 
 import Input from '../../components/FormLogin/'
 import logo from '../../../assets/logo-petfood.png'
 
-export default function Login(){
+export default function Login({ navigation }){
 
   const formRef = useRef(null);
 
@@ -49,7 +51,17 @@ export default function Login(){
   return(
     <View style={styles.container}>
 
+      <View style={styles.iconNavigation}>
+        <Icon name="angle-left" 
+              size={48} 
+              color="#564848"
+              onPress={() => navigation.navigate('Home')}
+        > 
+        </Icon>
+      </View>
         <Image style={styles.logo} source={logo} />
+
+        
 
         <Form style={styles.styleForm} ref={formRef} onSubmit={handleSubmit}>
 

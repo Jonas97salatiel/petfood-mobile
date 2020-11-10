@@ -1,11 +1,11 @@
 import React, { useRef} from 'react';
 import { Text , Image, View, TouchableOpacity, SafeAreaView, ScrollView} from 'react-native';
 import * as Yup from 'yup';
-import * as cep from 'cep-promise'
+import cepPromise from 'cep-promise'
+import { cpf } from 'cpf-cnpj-validator'; 
 import styles from './style';
 import { Form } from '@unform/mobile';
 import Icon from 'react-native-vector-icons/FontAwesome'
-
 
 
 import Input from '../../components/FormLogin/'
@@ -20,45 +20,107 @@ export default function Cadastro({ navigation }){
     try {
       
       
-    const schema = Yup.object().shape({
+      const schema = Yup.object().shape({
 
 
-      email: Yup.string()
+        email: Yup.string()
                   .email('Digite um email válido')
                   .required('O e-mail é obrigatório'),
 
-      password: Yup.string()
+        password: Yup.string()
                     .min(6, 'A senha tem no minimo 6 caracteres')
                     .required('A senha é obrigatória'),
       
       
-    });
+      });
 
-    await schema.validate(data, {abortEarly: false, });
-    console.log(data);
+      await schema.validate(data, {abortEarly: false, });
+        console.log(data);
 
     } catch (error) {
-            
-      const validationErrors = {};
+              
+        const validationErrors = {};
 
-      if (error instanceof Yup.ValidationError) {
-        // Validation failed
+        if (error instanceof Yup.ValidationError) {
+          // Validation failed
 
-        error.inner.forEach(error => {
-          validationErrors[error.path] = error.message;
-        });
+          error.inner.forEach(error => {
+            validationErrors[error.path] = error.message;
+          });
 
-        formRef.current.setErrors(validationErrors);
-    }
+          formRef.current.setErrors(validationErrors);
+        }
+
+    } 
 
   }
 
-}
+  async function consultaCpf(data){
 
-function focusNameInput() {
+    const cpfInput = await formRef.current.getFieldValue('cpf');
 
-  const cep = formRef.current.getFieldValue(cep);
-  console.log(cep);
+    formRef.current.setFieldError('cpf', ' ')
+    
+    let validation = cpf.isValid(cpfInput);
+
+    if(!validation){
+
+      formRef.current.setFieldError('cpf', 'Cpf inválido.')
+
+    }
+
+
+  }
+
+
+  async function consultaCep(data) {
+
+      try {
+
+        const cepInput = await formRef.current.getFieldValue('cep');
+
+        const cepValue = cepInput.replace(/[^0-9]/g, '')
+  
+        if (cepValue.length === 8) {
+  
+          let cepDate = await cepPromise(cepValue).then(result =>{
+          
+              return result;
+            });
+  
+  
+          const {city, neighborhood, state, street} = cepDate;
+  
+          formRef.current.setData({
+  
+            rua: street,
+            bairro: neighborhood,
+            cidade: city,
+            uf: state
+  
+          })
+      
+      
+        }else{
+          let cepDif = 8 - cepValue.length;
+  
+          if(cepDif === 1){
+  
+            formRef.current.setFieldError('cep', `Falta ${cepDif} digito.`)
+          }if(cepDif < 8 && cepDif > 1){
+  
+            formRef.current.setFieldError('cep', `Faltam ${cepDif} digitos.`)
+          }
+          
+          
+        }    
+
+      } catch (error) {
+        
+        formRef.current.setFieldError('cep', 'Cep inválido.')
+      }
+
+
 
 }
 
@@ -80,7 +142,7 @@ function focusNameInput() {
       <Text style={styles.tituloForm}>Informe seus dados</Text>
         <ScrollView>
 
-            <Form style={styles.styleForm} ref={formRef} onSubmit={handleSubmit}>
+            <Form style={styles.styleForm} ref={formRef} onSubmit={handleSubmit, consultaCep, consultaCpf}>
             
             
               <Input 
@@ -94,6 +156,7 @@ function focusNameInput() {
                 name="cpf" style={styles.textInputLogin} 
                 placeholder="CPF"
                 type="number"
+                onBlur={consultaCpf}
               />
                 
               <Input 
@@ -124,8 +187,8 @@ function focusNameInput() {
               <Input 
                 name="phone" style={styles.textInputLogin} 
                 placeholder="TELEFONE"
-                autoCompleteType="tel"
-                type="tel"
+                autoCompleteType="cc-number"
+                type="cc-number"
               />
 
 
@@ -135,7 +198,7 @@ function focusNameInput() {
                 autoCompleteType="postal-code"
                 type="postal-code"
                 maxLength={8}
-                onChange={focusNameInput}
+                onBlur={consultaCep}
               />
 
               <Input 
@@ -175,15 +238,6 @@ function focusNameInput() {
                 placeholder="UF"
                 type="off"
               />
-
-              <Input 
-                name="pais" style={styles.textInputLogin} 
-                placeholder="PAIS"
-                type="off"
-              />
-
-
-
 
               <TouchableOpacity 
               onPress={() => formRef.current.submitForm()}

@@ -28,6 +28,49 @@ export default StyleSheet.create({
         height: 30,
     },
 
+    imageInputView:{
+        width: '100%',
+        height: 150,
+        alignItems: "center",
+        justifyContent: 'center',
+    },
+
+    imageInput:{
+
+        width: 150,
+        height: 150,
+        borderRadius: 100
+    },
+
+    imageInputButtonView:{
+
+        width: '100%',
+        flexDirection:'row',
+        justifyContent: 'center',
+
+    },
+
+
+    imageInputButton:{
+
+        marginTop: 10,
+        margin: 10,
+        padding: 15,
+        backgroundColor: '#F8C733',
+        borderRadius:15,
+
+    },
+
+    imageInputText:{
+
+        fontSize: 18,
+        color: '#564848',
+    },  
+
+
+
+
+
     formContainer:{
         backgroundColor: '#fff',
         flex: 5,

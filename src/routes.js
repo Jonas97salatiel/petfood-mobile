@@ -37,10 +37,10 @@ function MyTabs() {
             />
 
             <Tab.Screen
-                name="HomeUser"
+                name="PetShop"
                 component={Petshop}
                 options={{
-                    tabBarLabel: 'Produtos',
+                    tabBarLabel: 'Loja',
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="store" color={color} size={size} />
                     ),
@@ -48,7 +48,7 @@ function MyTabs() {
             />
 
             <Tab.Screen
-                name="Petshop"
+                name="Carrinho"
                 component={Carrinho}
                 options={{
                     tabBarLabel: 'Cesta',
@@ -59,8 +59,8 @@ function MyTabs() {
             />
 
             <Tab.Screen
-                name="Carrinho"
-                component={Carrinho}
+                name="HomeUser"
+                component={HomeUser}
                 options={{
                     tabBarLabel: 'Perfil',
                     tabBarIcon: ({ color, size }) => (
@@ -85,6 +85,7 @@ export default function Routes() {
                 {isLoggedIn ? (
                     <>
                         <AppStack.Screen name="Main" component={MyTabs} options={{ headerShown: false }} />
+                        <AppStack.Screen name="Produto" component={Produto} options={{ headerShown: false }} />
                     </>
                 ) : (
 

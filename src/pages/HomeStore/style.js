@@ -64,8 +64,8 @@ export default StyleSheet.create({
 
     title:{
         
-        marginBottom: 10,
-        marginTop: 10,
+        marginBottom: 5,
+        marginTop: 5,
         fontSize: 24,
         fontWeight: 'bold',
 
@@ -120,7 +120,7 @@ export default StyleSheet.create({
     cardProdutos:{
         flex: 1,
         flexDirection: 'row',
-        height: 90,
+        height: 80,
         width: '90%',
         borderColor: '#EEE',
         borderWidth: 2,
@@ -130,8 +130,8 @@ export default StyleSheet.create({
     },
 
     imageProduto:{
-        height: 75,
-        width: 75,
+        height: 65,
+        width: 65,
         margin: 5,
         borderRadius: 10,
     },
@@ -156,7 +156,6 @@ export default StyleSheet.create({
 
         fontSize: 18,
         color: '#2EB524',
-        marginTop: 10,
   
     },
 

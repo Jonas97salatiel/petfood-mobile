@@ -29,20 +29,21 @@ export default StyleSheet.create({
 
     sectionImage: {
 
-        flex: 1,
+        flex: 3,
+        justifyContent:'center',
 
     },
 
     imageProduto: {
-        margin: 10,
         height: 200,
         width: 200,
+        borderRadius: 10,
 
     },
 
     sectionInfoProduto: {
-        flex: 1,
-        width: '90%'
+        flex: 2,
+        width: '90%',
 
     },
 
@@ -72,8 +73,8 @@ export default StyleSheet.create({
     },
 
     sectionMarca: {
-        marginTop: 10,
-        marginBottom: 10,
+        marginTop: 5,
+        marginBottom: 5,
         flexDirection: 'row',
 
     },
@@ -92,6 +93,11 @@ export default StyleSheet.create({
 
     desc: {
         fontSize: 18,
+    },
+
+    sectionQuatidadeButton:{
+        flex: 1,
+        justifyContent: 'center',
     },
 
     quatidadeButton: {

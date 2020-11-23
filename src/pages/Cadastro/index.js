@@ -393,7 +393,7 @@ export default function Cadastro({ navigation }) {
               onPress={() => formRef.current.submitForm()}
               style={styles.buttonIniciar}
             >
-              <Text style={styles.textButton}>ME CADASTRAR</Text>
+              <Text style={styles.textButton}>CADASTRAR</Text>
             </TouchableOpacity>
 
           </Form>

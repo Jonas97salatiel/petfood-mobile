@@ -1,6 +1,7 @@
 import { StyleSheet, Platform } from 'react-native';
 
 import Constants from 'expo-constants';
+import { color } from 'react-native-reanimated';
         
 export default StyleSheet.create({
 
@@ -38,7 +39,7 @@ export default StyleSheet.create({
     },
 
     icon: {
-        paddingLeft: 10,
+
         width: 30,
         height: 30,
     },
@@ -49,184 +50,133 @@ export default StyleSheet.create({
         fontWeight: 'bold',
     },
 
-    containerCarrinho:{
-
-        flex: 9,
-        marginTop: 10,
-        backgroundColor: '#FFF',
+    sectionProdutos:{
         width: '95%',
+        flex: 9,
 
     },
 
-    
-    sessionCardProdutos:{
-        flex: 1,
+    titleProdutos:{
+        fontSize: 18,
+        marginTop: 10,
+        marginBottom: 10,
+        fontWeight: 'bold',
+    },
+
+    picker:{
         width: '100%',
-        justifyContent: 'center'
+        height: 60,
+        borderRadius: 10,
+    },
+
+    flatList:{
+        height: 500,
     },
 
     cardProdutos:{
-        flex: 1,
-        flexDirection: 'row',
-        height: 65,
+        height: 60,
         width: '100%',
         borderColor: '#EEE',
-        borderTopWidth: 2,
-        borderBottomWidth: 2,
+        borderWidth: 2,
+        borderRadius: 5,
         marginBottom: 10,
-        
 
-    },
-
-    imageProduto:{
-        height: 50,
-        width: 50,
-        margin: 5,
-        borderRadius: 10,
-        
     },
 
     textItens:{
-        marginLeft: 5,
+        marginLeft: 10,
         marginTop: 5,
 
     },
 
     descProdutos:{
-        fontSize: 12,
-        paddingTop: 20,
-        paddingBottom: 20,
-        paddingLeft: 5,
-        width: '40%',
+        fontSize: 18,
+
     },
 
-    
+    total:{
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
+    },
+
+    totalValue:{
+
+        fontSize: 18,
+        color:'#000'
+    },
+
+    valorQuantidade:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '97%',
+        
+    },
+
+    petNameProdutos:{
+
+    },
+
     valor:{
 
-        fontSize: 12,
-        paddingTop: 20,
-        paddingBottom: 20,
+        fontSize: 18,
         color: '#2EB524',
-        width: '20%',
+  
+    },
+
+    textInputLogin:{
+        width: '100%',
+        height: 60,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderBottomColor:'#C4C4C4',
+        paddingLeft: 15,
+        marginBottom: 10,
+        borderRadius: 5
 
     },
 
-    quatidadeButton:{
+    validadeCvv:{
+
         flexDirection: 'row',
-        marginTop: 15,
-        marginBottom: 15,
-
+        justifyContent:'space-between'
     },
 
-    quatidadeButtonPlus:{
-        padding: 4,
-        width: 25,
-        borderWidth: 1,
-        borderColor: '#CCC',
-        borderTopRightRadius: 10,
-        borderBottomRightRadius: 10,
+    validadeCvvInput:{
+        width: '45%',
+        height: 60,
+        borderColor: 'gray',
+        borderBottomWidth: 2,
+        borderBottomColor:'#C4C4C4',
+        paddingLeft: 15,
+        marginBottom: 10,
     },
 
-    quatidadeButtonMinus:{
-        padding: 4,
-        width: 25,
-        borderWidth: 1,
-        borderColor: '#CCC',
-        borderTopLeftRadius: 10,
-        borderBottomLeftRadius: 10,
-    },
-
-    quatidadeButtonNumber:{
-        padding: 4,
-        borderWidth: 1,
-        borderColor: '#CCC'
-    },
-
-    quatidadeButtonNumberText:{
-
-    },
-
-    textInput:{
+    textInputLogincartao:{
         width: '100%',
         height: 60,
         borderColor: 'gray',
         borderBottomWidth: 2,
-        borderBottomColor: '#E5E5E5',
+        borderBottomColor:'#C4C4C4',
         paddingLeft: 15,
-        margin: 5,
-
+        marginBottom: 10,
     },
 
-
-    bottomNavigation:{
+    buttonIniciar:{
+        backgroundColor: '#564848',
         width: '100%',
-        flex: 1,
+        height: 60,
+        alignItems: "center",
         justifyContent: 'space-around',
-        flexDirection: 'row',
-        borderColor: '#AAA',
-        borderTopWidth: 1,
-        
-    },  
-
-    bottomIcon:{
-        // backgroundColor: '#000',
-        padding: 6,
-        marginTop: 4,
 
     },
 
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22
-      },
-      modalView: {
-        width: '90%',
-        height: '50%',  
-        margin: 2,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 5,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5
-      },
+    textButton:{
+        color: '#F8C733',
+        fontSize: 18,
+    }
 
-      openButton: {
-        backgroundColor: "#F194FF",
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2
-      },
-      textStyle: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center"
-      },
-      modalText: {
-        marginBottom: 15,
-        textAlign: "center",
-        fontSize: 18
-      },
 
-      textInputPagamento:{
-
-        width: '100%',
-        height: 60,
-        borderColor: 'gray',
-        borderBottomWidth: 2,
-        borderBottomColor: '#E5E5E5',
-        paddingLeft: 15,
-        margin: 5, 
-
-      },
 
 
 });

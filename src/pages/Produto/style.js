@@ -13,6 +13,49 @@ export default StyleSheet.create({
 
     },
 
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+
+    openButton: {
+        backgroundColor: "#F194FF",
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+    },
+
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+    },
+
+
     topView: {
 
         flexDirection: 'row',
@@ -30,7 +73,7 @@ export default StyleSheet.create({
     sectionImage: {
 
         flex: 3,
-        justifyContent:'center',
+        justifyContent: 'center',
 
     },
 
@@ -95,7 +138,7 @@ export default StyleSheet.create({
         fontSize: 18,
     },
 
-    sectionQuatidadeButton:{
+    sectionQuatidadeButton: {
         flex: 1,
         justifyContent: 'center',
     },
@@ -107,7 +150,7 @@ export default StyleSheet.create({
     },
 
     quatidadeButtonPlus: {
-        alignItems:'center',
+        alignItems: 'center',
         padding: 10,
         width: 50,
         borderWidth: 1,
@@ -117,7 +160,7 @@ export default StyleSheet.create({
     },
 
     quatidadeButtonMinus: {
-        alignItems:'center',
+        alignItems: 'center',
         padding: 10,
         width: 50,
         borderWidth: 1,
@@ -127,7 +170,7 @@ export default StyleSheet.create({
     },
 
     quatidadeButtonNumber: {
-        alignItems:'center',
+        alignItems: 'center',
         padding: 10,
         width: 50,
         borderWidth: 1,
@@ -138,7 +181,7 @@ export default StyleSheet.create({
 
     },
 
-    sectionAddButon:{
+    sectionAddButon: {
 
         justifyContent: 'center',
         height: 60,
@@ -146,12 +189,12 @@ export default StyleSheet.create({
         backgroundColor: '#F8C733',
     },
 
-    addButon:{
+    addButon: {
         flexDirection: 'row',
         justifyContent: 'center',
     },
 
-    addButonText:{
+    addButonText: {
         marginLeft: 10,
     }
 

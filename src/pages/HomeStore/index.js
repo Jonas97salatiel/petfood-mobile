@@ -107,7 +107,7 @@ export default function HomeStore({ navigation }) {
                     >
                       <Text style={styles.descProdutos} >{item.nome}</Text>
                     </TouchableOpacity>
-                    <Text style={styles.petNameProdutos}>Nome do Pet</Text>
+                    <Text style={styles.petNameProdutos}>{item.razaoSocial}</Text>
                     <NumberFormat
                       value={item.valor}
                       displayType={'text'}

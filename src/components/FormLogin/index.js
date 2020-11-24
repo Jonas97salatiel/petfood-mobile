@@ -1,47 +1,50 @@
 import React, {
-    useEffect,
-    useRef,
-    useState,
-  } from 'react';
-  
-  import styles from './style'
+  useEffect,
+  useRef,
+  useState,
+  forwardRef
+} from 'react';
 
-  import { TextInput, Text } from 'react-native';
-  import { useField } from '@unform/core';
-  
-  function Input({ name, ...rest }) {
-    const inputRef = useRef(null);
-  
-    const { fieldName, registerField, defaultValue, error } = useField(name);
-  
-    useEffect(() => {
-      inputRef.current.value = defaultValue;
-    }, [defaultValue]);
-  
-    useEffect(() => {
+import styles from './style'
 
-      registerField({
-        name: fieldName,
-        ref: inputRef.current,
-        path: 'value',
-        clearValue(ref) {
-          ref.value = '';
-          ref.clear();
-        },
-        setValue(ref, value) {
-          ref.setNativeProps({ text: value });
-          inputRef.current.value = value;
-        },
-        getValue(ref) {
-          return ref.value;
-        },
-      });
-    }, [fieldName, registerField]);
-  
-    return (
+import { TextInput, Text } from 'react-native';
+import { useField } from '@unform/core';
+import { Ref } from 'yup';
 
-      <>
+function Input({ name, ...rest }) {
+  const inputRef = useRef(null);
+
+  const { fieldName, registerField, defaultValue, error } = useField(name);
+
+  useEffect(() => {
+    inputRef.current.value = defaultValue;
+  }, [defaultValue]);
+
+  useEffect(() => {
+
+    registerField({
+      name: fieldName,
+      ref: inputRef.current,
+      path: 'value',
+      clearValue(ref) {
+        ref.value = '';
+        ref.clear();
+      },
+      setValue(ref, value) {
+        ref.setNativeProps({ text: value });
+        inputRef.current.value = value;
+      },
+      getValue(ref) {
+        return ref.value;
+      },
+    });
+  }, [fieldName, registerField]);
+
+  return (
+
+    <>
       <TextInput
+
         ref={inputRef}
         defaultValue={defaultValue}
         onChangeText={value => {
@@ -52,10 +55,10 @@ import React, {
         className={error ? 'has-error' : ''}
 
         {...rest}
-      /> 
-       { error && <Text className="error" style={styles.errorText}>{error}</Text> }
+      />
+      { error && <Text className="error" style={styles.errorText}>{error}</Text>}
     </>
-    );
-  };
-  
-  export default Input;
+  );
+};
+
+export default forwardRef(Input);

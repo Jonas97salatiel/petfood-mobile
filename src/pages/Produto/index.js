@@ -115,7 +115,7 @@ export default function Produtos({ route, navigation }) {
       
       console.log('Enviando dados para o redux')
       console.log(dispatch({ type: NEW_VALUE, carrinho: carrinho.carrinho }))
-
+      navigation.navigate('Main');
     } else if (carrinho.carrinho.produtos[0].idProduto > 0) {
 
       if (carrinho.carrinho.cnpj !== cnpj) {
@@ -128,12 +128,17 @@ export default function Produtos({ route, navigation }) {
         if (carrinho.carrinho.produtos[index].idProduto === idProduto) {
           carrinho.carrinho.produtos[index].qtd = qtd
 
+          dispatch({ type: NEW_VALUE, carrinho: carrinho.carrinho })
+          
+          navigation.navigate('Main');
+
           return
 
         }
 
         index++
       }
+
       console.log('Adicionando produto ao carrinho')
       carrinho.carrinho.produtos.push({
         nome: nome,
@@ -144,7 +149,7 @@ export default function Produtos({ route, navigation }) {
 
       console.log('Enviando dados para o redux')
       console.log(dispatch({ type: NEW_VALUE, carrinho: carrinho.carrinho }))
-      
+      navigation.navigate('Main');
     }
 
   }

@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Platform, Button, Text, Image, View, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import * as Yup from 'yup';
 import cepPromise from 'cep-promise';
+import { useSelector, useDispatch } from 'react-redux';
 import { cpf } from 'cpf-cnpj-validator';
 import styles from './style';
 import { Form } from '@unform/mobile';
@@ -9,11 +10,16 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import api from '../../services/api';
+import { CLICK_UPDATE_VALUE,  CLICK_DOWN_VALUE} from '../../actions/actionsTypes';
+
 
 import Input from '../../components/FormLogin/';
 import logo from '../../../assets/logo-petfood.png';
 
 export default function Cadastro({ navigation }) {
+
+  const dispatch = useDispatch();
+  const userReducer = useSelector(state => state.userState.userState ); 
 
   const [image, setImage] = useState('https://petfood.blob.core.windows.net/imagens/perfil.jpg');
   const [imageBase64Blob, setImagebase64Blob] = useState(null);
@@ -84,7 +90,7 @@ export default function Cadastro({ navigation }) {
       cpf,
       email,
       nome,
-      numeroEndereco,
+      numero,
       senha,
       senha1,
       phone,
@@ -100,28 +106,27 @@ export default function Cadastro({ navigation }) {
       consultaCep();
       console.log('validando cep');
 
-
       formRef.current.setErrors({});
 
-      const schema = await Yup.object().shape({
+     // const schema = await Yup.object().shape({
         
-        nome: Yup.string()
-          .required('O campo nome é obrigatório.'),
+      //  nome: Yup.string()
+      //    .required('O campo nome é obrigatório.'),
 
-        email: Yup.string()
-          .email('Digite um email válido')
-          .required('O e-mail é obrigatório'),
+       // email: Yup.string()
+       //   .email('Digite um email válido')
+       //   .required('O e-mail é obrigatório'),
 
-        senha: Yup.string()
-          .min(6, 'A senha tem no minimo 6 caracteres')
-          .required('A senha é obrigatória'),
+      //  senha: Yup.string()
+      //    .min(6, 'A senha tem no minimo 6 caracteres')
+       //   .required('A senha é obrigatória'),
 
-      });
+     // });
 
 
-      await schema.validate(data, { abortEarly: false });
-
-      let response = await api.post("usuarios", { nome, email, senha, phone });
+    //  await schema.validate(data, { abortEarly: false });
+      console.log('Cadastrando usuario')
+      await api.post("usuarios", { nome, email, senha, phone });
 
       let responseUser = await api.get(`/usuarios/${email}`);
 
@@ -131,15 +136,22 @@ export default function Cadastro({ navigation }) {
 
       let imageBase64 = headeBlobImage + imageBase64Blob;
 
-      console.log(imageBase64);
+      console.log('Cadastrando endereco')
+      await api.post("/enderecos", { cep, rua, numero, complemento, bairro, cidade, uf, pais, userId });
 
-      let response2 = await api.post("/clientes", { userId, cpf, nome, imageBase64 });
+      console.log('Cadastrando cliente')
+      await api.post("/clientes", { userId, cpf, nome, imageBase64 });
 
-      console.log(response2.status);
+
+      const response = await api.post("usuariosLogin", { email, senha });
+
+      const responseUserData = response.data;
+
+      dispatch({type: CLICK_UPDATE_VALUE, userState: responseUserData })
 
       console.log('Redirecionando para rota home user');
 
-      navigation.navigate('HomeStore');
+      navigation.navigate('Main');
 
     } catch (error) {
 
@@ -358,7 +370,7 @@ export default function Cadastro({ navigation }) {
             />
 
             <Input
-              name="numeroEndereco" style={styles.textInputLogin}
+              name="numero" style={styles.textInputLogin}
               placeholder="NÚMERO"
               autoCompleteType="street-address"
               type="off"

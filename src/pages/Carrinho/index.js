@@ -7,6 +7,7 @@ import {
   ScrollView,
   FlatList
 } from 'react-native';
+import * as Yup from 'yup';
 import styles from './style';
 import Icon from 'react-native-vector-icons/Feather'
 import Input from '../../components/FormLogin/';
@@ -17,29 +18,136 @@ import { useSelector } from 'react-redux';
 import NumberFormat from 'react-number-format';
 import { Picker } from '@react-native-picker/picker';
 
-export default function Carrinho({  navigation }) {
+export default function Carrinho({ navigation }) {
 
-  const [pickerState, setPickerState] = useState('Credito');
 
   var data = useSelector(state => state.carrinhoState.carrinho.produtos);
+  var cnpj = useSelector(state => state.carrinhoState.carrinho.cnpj);
+  console.log(cnpj);
+  var idCliente = useSelector(state => state.userState.userState.id);
 
-  var result = 0;
 
-  for (let index = 0; index < data.length;) {
+  useEffect(() => {
+
+    console.log('atualizando tela')
+    caulcarTotal();
+
+    getEndereco();
+
+    getDadosParceiro()
 
 
-    result = result + (data[index].valor * data[index].qtd);
+  }, [useSelector(state => state)]);
 
-    index++
+
+  const [pickerState, setPickerState] = useState('Credito');
+  const [dadosUsuario, setDadosUsuario] = useState({});
+  const [dadosParceiro, setDadosParceiro] = useState({});
+  const [valorPedido, setvalorPedido] = useState('');
+
+
+  const [cartao, setCartao] = useState('')
+  const [cpf, setCpf] = useState('')
+  const [validade, setValidade] = useState('')
+  const status = 'Em separação';
+  const numeroTransacao = '123';
+  const idFormaPagamento = '1';
+  const idCuponsDesconto = '1';
+  const idParceiro = dadosParceiro[0].idParceiro;
+
+
+
+  function caulcarTotal() {
+    let result = 0;
+    for (let index = 0; index < data.length;) {
+      result = result + (data[index].valor * data[index].qtd);
+      index++
+      console.log(result)
+    }
+
+    setvalorPedido(result)
+
+    console.log('Total calculado')
+    console.log(result)
+    return
   }
 
-  console.log(result)
+
+  async function getEndereco() {
+    await api.get(`enderecos/${idCliente}`).then(res => {
+      const dadosUsuario = res.data;
+      setDadosUsuario(dadosUsuario);
+    });
+  }
+
+  async function getDadosParceiro() {
+    await api.get(`parceiro/${cnpj}`).then(res => {
+      const dadosParceiro = res.data;
+      setDadosParceiro(dadosParceiro);
+    });
+  }
 
   const formRef = useRef(null);
 
-  function handleSubmit(data) {
+  async function handleSubmit(dataForm) {
 
-    console.log(data)
+    const { cvv, nometitular } = dataForm
+
+    dataForm.cartao = cartao;
+    dataForm.cpf = cpf;
+    dataForm.validade = validade;
+
+    try {
+
+      console.log(dataForm);
+
+      formRef.current.setErrors({});
+
+      console.log('Tudo ok!')
+
+      await api.post("pedido", {
+        valorPedido,
+        status,
+        numeroTransacao,
+        idCliente,
+        idFormaPagamento,
+        idCuponsDesconto,
+        idParceiro,
+        ListaProdutos: data
+      });
+
+      // const schema = Yup.object().shape({
+
+      //    cvv: Yup.number().min(3, 'Valor inválido').required('Valor inválido'),
+      //   nome: Yup.string().min(7, 'Nome inválido').required('O nome é obrigatório'),
+      //   cartao: Yup.number().min(16, 'Valor inválido').required('Número do cartão é obrigatório'),
+      //   cpf: Yup.string().min(11, 'CPF inválido').required('Campo cpf é obrigatório'),
+      //   validade: Yup.required('O campo é obrigatório')
+
+      // })
+
+      //  schema.validate(data, { abortEarly: false });
+
+    } catch (error) {
+
+      const validationErrors = {};
+
+      if (error instanceof Yup.ValidationError) {
+        // Validation failed
+        error.inner.forEach(error => {
+          validationErrors[error.path] = error.message;
+        });
+
+        formRef.current.setErrors(validationErrors);
+
+        console.log(error);
+      }
+    }
+
+
+
+
+
 
   }
 
@@ -122,7 +230,7 @@ export default function Carrinho({  navigation }) {
           <View style={styles.total}>
             <Text style={styles.totalValue}>Valor Total: </Text>
             <NumberFormat
-              value={result}
+              value={valorPedido}
               displayType={'text'}
               // thousandSeparator={true}
               prefix={'R$ '}
@@ -134,11 +242,10 @@ export default function Carrinho({  navigation }) {
           </View>
 
           <Text style={styles.titleProdutos}>Entregar em:</Text>
-          <Text>Rua:</Text>
-          <Text>Número:</Text>
-          <Text>Complemento:</Text>
-          <Text>Apt:</Text>
-          <Text>Bairro: , Brasília DF</Text>
+          <Text>Bairro: {dadosUsuario.bairro}, {dadosUsuario.uf}</Text>
+          <Text>Rua: {dadosUsuario.rua}</Text>
+          <Text>Número: {dadosUsuario.numero}</Text>
+          <Text>Complemento: {dadosUsuario.complemento}</Text>
 
           <Text style={styles.titleProdutos}>Informação Adicional </Text>
 
@@ -165,24 +272,42 @@ export default function Carrinho({  navigation }) {
               <Picker.Item label="Débito" value="Débito" />
             </Picker>
 
-            <Input
+            {/*<Input
               name="numerocartao" style={styles.textInputLogincartao}
               placeholder="Número do cartão"
               autoCompleteType="off"
               keyboardType='numeric'
               maxLength={16}
+            />*/}
+
+            <InputMask
+              type={'credit-card'}
+              placeholder="Número do cartão"
+              name="cartao"
+              keyboardType="numeric"
+              style={styles.textInputLogincartao}
+              value={cartao}
+              onChangeText={text => {
+                setCartao(text)
+              }}
+
             />
 
             <View style={styles.validadeCvv}>
 
-              <Input
-                name="validade" style={styles.validadeCvvInput}
+              <InputMask
+                type={'datetime'}
+                options={{
+                  format: 'MM/YY'
+                }}
                 placeholder="Validade"
-                autoCompleteType="off"
-                keyboardType='numeric'
-                maxLength={4}
-                dataDetectorTypes='calendarEvent'
-
+                name="validade"
+                keyboardType="numeric"
+                style={styles.validadeCvvInput}
+                value={validade}
+                onChangeText={text => {
+                  setValidade(text)
+                }}
               />
 
               <Input
@@ -192,7 +317,9 @@ export default function Carrinho({  navigation }) {
                 keyboardType='numeric'
                 maxLength={3}
 
+
               />
+
             </View>
 
             <Input
@@ -204,12 +331,25 @@ export default function Carrinho({  navigation }) {
 
             />
 
-            <Input
+            {/*<Input
               name="cpfcnpj" style={styles.textInputLogincartao}
               placeholder="CPF / CNPJ do titular"
               autoCompleteType="off"
               keyboardType='numeric'
               maxLength={16}
+
+            />*/}
+
+            <InputMask
+              type="cpf"
+              name="cpf"
+              keyboardType="numeric"
+              style={styles.textInputLogincartao}
+              placeholder="CPF / CNPJ do titular"
+              value={cpf}
+              onChangeText={text => {
+                setCpf(text)
+              }}
 
             />
 

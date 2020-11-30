@@ -18,11 +18,11 @@ import Icon from 'react-native-vector-icons/Feather'
 
 export default function HomeStore({ navigation }) {
 
-
   useEffect(() => {
     getData();
   }, [])
 
+  const [search, setSearch] = useState();
   const [dataParceiros, setDataParceiros] = useState('');
   const [dataProdutos, setDataProdutos] = useState('');
 
@@ -38,11 +38,35 @@ export default function HomeStore({ navigation }) {
     });
   }
 
+  function filterItems(query) {
+
+    const filtroProdutos = dataProdutos.filter(dataProdutos =>
+      dataProdutos.nome.toLowerCase().indexOf(query.toLowerCase()) > -1)
+
+    if (filtroProdutos.length > 1) {
+      setDataProdutos(filtroProdutos);
+    }
+
+    if (query.length < 1) {
+      getData()
+    }
+
+    console.log(filtroProdutos);
+
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.topView}>
-        <TextInput style={styles.inputSearch}>
+        <TextInput
+          style={styles.inputSearch}
+          value={search}
+          onChangeText={text => {
+            setSearch(text),
+              filterItems(text)
+          }}
+
+        >
 
         </TextInput>
         <TouchableOpacity style={styles.inputSearchIcon}>
@@ -52,7 +76,10 @@ export default function HomeStore({ navigation }) {
             color="#564848"
           />
         </TouchableOpacity >
-        <TouchableOpacity style={styles.bellIcon}>
+        <TouchableOpacity 
+        style={styles.bellIcon}
+        onPress={() => navigation.navigate('Pedidos')}
+        >
           <Icon
             name="bell"
             size={26}
@@ -73,8 +100,18 @@ export default function HomeStore({ navigation }) {
           renderItem={({ item }) => {
             return (
               <View style={styles.cardPetShop}>
-                <Image source={{ uri: item.urlImageLogo }} style={styles.imagePetShop} />
-                <Text style={styles.textPetShop}>{item.razaoSocial}</Text>
+
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('PetShop', { DadosParceiro: item })}
+                >
+                  <Image source={{ uri: item.urlImageLogo }} style={styles.imagePetShop} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('PetShop', { DadosParceiro: item })}
+                >
+                  <Text style={styles.textPetShop}>{item.razaoSocial}</Text>
+                </TouchableOpacity>
               </View>
             )
           }}
@@ -94,7 +131,7 @@ export default function HomeStore({ navigation }) {
               <View style={styles.sessionCardProdutos}>
                 <View style={styles.cardProdutos}>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('Produto', {idProduto: item.idProduto})}
+                    onPress={() => navigation.navigate('Produto', { idProduto: item.idProduto })}
                   >
                     <Image
                       source={{ uri: item.urlImage }}
@@ -103,7 +140,7 @@ export default function HomeStore({ navigation }) {
                   </TouchableOpacity>
                   <View style={styles.textItens}>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('Produto' , {idProduto: item.idProduto})}
+                      onPress={() => navigation.navigate('Produto', { idProduto: item.idProduto })}
                     >
                       <Text style={styles.descProdutos} >{item.nome}</Text>
                     </TouchableOpacity>

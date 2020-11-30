@@ -14,26 +14,34 @@ import Input from '../../components/FormLogin/';
 import InputMask from '../../components/InputMask';
 import { Form } from '@unform/mobile';
 import api from '../../services/api'
-import { useSelector } from 'react-redux';
 import NumberFormat from 'react-number-format';
 import { Picker } from '@react-native-picker/picker';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  CLICK_UPDATE_VALUE,
+  NEW_VALUE,
+  CLICK_DOWN_VALUE
+} from '../../actions/actionsTypes';
 
 export default function Carrinho({ navigation }) {
 
+  var date = new Date().getDate();
+  var month = new Date().getMonth() + 1;
+  var year = new Date().getFullYear();;
 
-  var data = useSelector(state => state.carrinhoState.carrinho.produtos);
+  const currentDate = `${year}-${month}-${date}`;
+  var dataProdutos = '0';
+
+  dataProdutos = useSelector(state => state.carrinhoState.carrinho.produtos);
   var cnpj = useSelector(state => state.carrinhoState.carrinho.cnpj);
-  console.log(cnpj);
   var idCliente = useSelector(state => state.userState.userState.id);
-
+  const dispatch = useDispatch();
 
   useEffect(() => {
 
     console.log('atualizando tela')
     caulcarTotal();
-
-    getEndereco();
-
+    getDadosCliente();
     getDadosParceiro()
 
 
@@ -42,25 +50,33 @@ export default function Carrinho({ navigation }) {
 
   const [pickerState, setPickerState] = useState('Credito');
   const [dadosUsuario, setDadosUsuario] = useState({});
-  const [dadosParceiro, setDadosParceiro] = useState({});
+  const [dadosParceiro, setDadosParceiro] = useState([{
+    idParceiro: '0'
+  }]);
   const [valorPedido, setvalorPedido] = useState('');
+
 
 
   const [cartao, setCartao] = useState('')
   const [cpf, setCpf] = useState('')
   const [validade, setValidade] = useState('')
-  const status = 'Em separação';
+  const status = 'Aguardando envio';
   const numeroTransacao = '123';
   const idFormaPagamento = '1';
   const idCuponsDesconto = '1';
   const idParceiro = dadosParceiro[0].idParceiro;
 
-
+  var carrinho = {
+    nome: '',
+    idProduto: '',
+    valor: 0,
+    qtd: 0
+  }
 
   function caulcarTotal() {
     let result = 0;
-    for (let index = 0; index < data.length;) {
-      result = result + (data[index].valor * data[index].qtd);
+    for (let index = 0; index < dataProdutos.length;) {
+      result = result + (dataProdutos[index].valor * dataProdutos[index].qtd);
       index++
       console.log(result)
     }
@@ -73,8 +89,8 @@ export default function Carrinho({ navigation }) {
   }
 
 
-  async function getEndereco() {
-    await api.get(`enderecos/${idCliente}`).then(res => {
+  async function getDadosCliente() {
+    await api.get(`clientes/${idCliente}`).then(res => {
       const dadosUsuario = res.data;
       setDadosUsuario(dadosUsuario);
     });
@@ -97,24 +113,84 @@ export default function Carrinho({ navigation }) {
     dataForm.cpf = cpf;
     dataForm.validade = validade;
 
-    try {
+    var valorPedidoCents = valorPedido * 100;
+    var varCartao = cartao.replace(/\s/g, '');
+    var validadeExprt = validade.replace(/[^\w\.@-]/g, '')
+    var email = dadosUsuario[0].email;
+    var telefone = dadosUsuario[0].telefone;
+    var nomeUsuario = dadosUsuario[0].nome;
+    var uf = dadosUsuario[0].uf;
+    var cidade = dadosUsuario[0].cidade;
+    var bairro = dadosUsuario[0].bairro;
+    var rua = dadosUsuario[0].rua;
+    var numeroRua = dadosUsuario[0].numero;
+    var cep = dadosUsuario[0].cep;
 
-      console.log(dataForm);
+
+    var nomeParceiro = dadosParceiro[0].razaoSocial;
+    var ufParceiro = dadosParceiro[0].uf;
+    var cidadeParceiro = dadosParceiro[0].cidade;
+    var bairroParceiro = dadosParceiro[0].bairro;
+    var ruaParceiro = dadosParceiro[0].rua;
+    var numeroRuaParceiro = dadosParceiro[0].numero;
+    var cepParceiro = dadosParceiro[0].cep;
+    
+    console.log(dadosUsuario[0].cpf);
+
+    try {
 
       formRef.current.setErrors({});
 
       console.log('Tudo ok!')
 
-      await api.post("pedido", {
-        valorPedido,
-        status,
-        numeroTransacao,
-        idCliente,
-        idFormaPagamento,
-        idCuponsDesconto,
-        idParceiro,
-        ListaProdutos: data
-      });
+      const response =  await api.post("pedido", {
+        //  **Dados do cliente** 
+        valorPedidoCents: valorPedidoCents,
+        varCartao: varCartao,
+        cvv: cvv,
+        validadeExprt: validadeExprt,
+        nometitular: nometitular,
+        idCliente: idCliente,    
+        status: status,
+        numeroTransacao: numeroTransacao,
+        email: email,
+        telefone: telefone,
+        cpf: cpf,
+        nomeUsuario: nomeUsuario,
+        uf: uf,
+        cidade: cidade,
+        bairro: bairro,
+        rua: rua,
+        numeroRua: numeroRua,
+        cep: cep,
+          //  **Dados do Parceiro** 
+        nomeParceiro: nomeParceiro,
+        currentDate: currentDate,
+        ufParceiro: ufParceiro,
+        cidadeParceiro: cidadeParceiro,
+        bairroParceiro: bairroParceiro,
+        ruaParceiro: ruaParceiro,    
+        numeroRuaParceiro: numeroRuaParceiro,
+        cepParceiro: cepParceiro,
+        idFormaPagamento: idFormaPagamento,
+        idCuponsDesconto: idCuponsDesconto,
+        idParceiro: idParceiro,
+        ListaProdutos: dataProdutos
+        }).then(function(response){
+          console.log(response);
+        }).catch(function(error){
+          console.log(error);
+        })
+        ;
+
+        navigation.navigate('FimPedido');
+        
+        // dispatch({ type: NEW_VALUE, carrinho: carrinho })
+
+        
+
+
+
 
       // const schema = Yup.object().shape({
 
@@ -129,7 +205,7 @@ export default function Carrinho({ navigation }) {
       //  schema.validate(data, { abortEarly: false });
 
     } catch (error) {
-
+      console.log(error)
       const validationErrors = {};
 
       if (error instanceof Yup.ValidationError) {
@@ -144,15 +220,7 @@ export default function Carrinho({ navigation }) {
       }
     }
 
-
-
-
-
-
   }
-
-
-
   return (
 
 
@@ -179,7 +247,7 @@ export default function Carrinho({ navigation }) {
 
           <FlatList
             horizontal={false}
-            data={data}
+            data={dataProdutos}
             keyExtractor={item => item.idProduto.toString()}
             renderItem={({ item }) => {
               return (

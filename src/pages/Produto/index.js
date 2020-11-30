@@ -23,14 +23,11 @@ import {
 import api from '../../services/api'
 import NumberFormat from 'react-number-format';
 
-
 export default function Produtos({ route, navigation }) {
 
   var carrinho = useSelector(state => state.carrinhoState);
 
   var state = useSelector(state => state);
-
-  
 
   const dispatch = useDispatch();
   const [lengthcarrinho, setLengthcarrinho] = useState(carrinho)
@@ -75,6 +72,7 @@ export default function Produtos({ route, navigation }) {
       }
 
       index++
+
     }
 
   }, [])
@@ -97,8 +95,11 @@ export default function Produtos({ route, navigation }) {
       return
     }
     setQtdProduto(qtdProduto - 1);
-
   }
+
+
+
+
 
  async function salvarProduto(cnpj, nome, idProduto, valor, qtd) {
 
@@ -115,7 +116,9 @@ export default function Produtos({ route, navigation }) {
       
       console.log('Enviando dados para o redux')
       console.log(dispatch({ type: NEW_VALUE, carrinho: carrinho.carrinho }))
-      navigation.navigate('Main');
+     
+      navigation.goBack();
+     // navigation.navigate('PetShop');
     } else if (carrinho.carrinho.produtos[0].idProduto > 0) {
 
       if (carrinho.carrinho.cnpj !== cnpj) {
@@ -130,7 +133,9 @@ export default function Produtos({ route, navigation }) {
 
           dispatch({ type: NEW_VALUE, carrinho: carrinho.carrinho })
           
-          navigation.navigate('Main');
+          navigation.goBack();
+
+          //navigation.navigate('PetShop');
 
           return
 
@@ -149,7 +154,7 @@ export default function Produtos({ route, navigation }) {
 
       console.log('Enviando dados para o redux')
       console.log(dispatch({ type: NEW_VALUE, carrinho: carrinho.carrinho }))
-      navigation.navigate('Main');
+      navigation.goBack();
     }
 
   }
@@ -171,7 +176,7 @@ export default function Produtos({ route, navigation }) {
           <View style={styles.modalView}>
             <Text style={styles.modalText}>
               Você só pode adicionar itens de um petshop por vez
-              </Text>
+            </Text>
 
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: "#F8C733" }}

@@ -65,7 +65,7 @@ export default StyleSheet.create({
     title:{
         
         marginBottom: 5,
-        marginTop: 5,
+        marginTop: 0,
         fontSize: 24,
         fontWeight: 'bold',
 
@@ -73,7 +73,7 @@ export default StyleSheet.create({
 
     scrollViewPetShop:{
        
-        height: 250,
+        height: 100,
 
     },
 
@@ -105,6 +105,7 @@ export default StyleSheet.create({
 
     scrollViewProdutos:{
         
+        height: 250,
         
     },
 
@@ -113,7 +114,6 @@ export default StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'center'
-        
 
     },
 

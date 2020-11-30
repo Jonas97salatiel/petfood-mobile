@@ -12,8 +12,12 @@ import HomeUser from './pages/HomeUser';
 import Login from './pages/Login';
 import Cadastro from './pages/Cadastro';
 import Produto from './pages/Produto';
-import Petshop from './pages/Petshop';
+import PetShop from './pages/PetShop';
+import PetShopList from './pages/PetShopList';
 import Carrinho from './pages/Carrinho';
+import Pedidos from './pages/Pedidos';
+import FimPedido from './pages/FimPedido';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -37,8 +41,8 @@ function MyTabs() {
             />
 
             <Tab.Screen
-                name="PetShop"
-                component={Petshop}
+                name="PetShopList"
+                component={PetShopList}
                 options={{
                     tabBarLabel: 'Loja',
                     tabBarIcon: ({ color, size }) => (
@@ -86,6 +90,9 @@ export default function Routes() {
                     <>
                         <AppStack.Screen name="Main" component={MyTabs} options={{ headerShown: false }} />
                         <AppStack.Screen name="Produto" component={Produto} options={{ headerShown: false }} />
+                        <AppStack.Screen name="PetShop" component={PetShop} options={{ headerShown: false }} />
+                        <AppStack.Screen name="Pedidos" component={Pedidos} options={{ headerShown: false }} />
+                        <AppStack.Screen name="FimPedido" component={FimPedido} options={{ headerShown: false }} />
                     </>
                 ) : (
 

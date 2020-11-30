@@ -47,7 +47,7 @@ export default function Cadastro({ navigation }) {
     if (!result.cancelled) {
       setImage(result.uri);
       setImagebase64Blob(result.base64);
-      console.log(result);
+
     }
 
   }
@@ -74,7 +74,6 @@ export default function Cadastro({ navigation }) {
     if (!result.cancelled) {
       setImage(result.uri);
       setImagebase64Blob(result.base64);
-      console.log(result);
 
     }
   };
@@ -97,6 +96,7 @@ export default function Cadastro({ navigation }) {
       rua,
       uf } = data;
 
+      const pais = 'Brasil'
     try {
 
       validatePassword();
@@ -128,20 +128,25 @@ export default function Cadastro({ navigation }) {
       console.log('Cadastrando usuario')
       await api.post("usuarios", { nome, email, senha, phone });
 
-      let responseUser = await api.get(`/usuarios/${email}`);
+      let responseUser = await api.get(`usuarios/${email}`);
 
       const userId = responseUser.data[0].id;
+
+      await api.post("enderecos", { cep, rua, numero, complemento, bairro, cidade, uf, pais, userId })
+      
+      console.log('Endereço cadastrado')
 
       let headeBlobImage = "data:image/jpeg;base64,"
 
       let imageBase64 = headeBlobImage + imageBase64Blob;
 
-      console.log('Cadastrando endereco')
-      await api.post("/enderecos", { cep, rua, numero, complemento, bairro, cidade, uf, pais, userId });
+    
+     
 
       console.log('Cadastrando cliente')
-      await api.post("/clientes", { userId, cpf, nome, imageBase64 });
+      const responseCliente =  await api.post("clientes", { userId, cpf, nome, imageBase64 });
 
+      console.log(responseCliente.status)
 
       const response = await api.post("usuariosLogin", { email, senha });
 
@@ -169,8 +174,6 @@ export default function Cadastro({ navigation }) {
       }
 
     }
-
-
 
   }
 

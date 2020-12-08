@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import api from '../../services/api';
-import { CLICK_UPDATE_VALUE,  CLICK_DOWN_VALUE} from '../../actions/actionsTypes';
+import { CLICK_UPDATE_VALUE, CLICK_DOWN_VALUE } from '../../actions/actionsTypes';
 
 
 import Input from '../../components/FormLogin/';
@@ -19,7 +19,7 @@ import logo from '../../../assets/logo-petfood.png';
 export default function Cadastro({ navigation }) {
 
   const dispatch = useDispatch();
-  const userReducer = useSelector(state => state.userState.userState ); 
+  const userReducer = useSelector(state => state.userState.userState);
 
   const [image, setImage] = useState('https://petfood.blob.core.windows.net/imagens/perfil.jpg');
   const [imageBase64Blob, setImagebase64Blob] = useState(null);
@@ -96,7 +96,7 @@ export default function Cadastro({ navigation }) {
       rua,
       uf } = data;
 
-      const pais = 'Brasil'
+    const pais = 'Brasil'
     try {
 
       validatePassword();
@@ -108,23 +108,23 @@ export default function Cadastro({ navigation }) {
 
       formRef.current.setErrors({});
 
-     // const schema = await Yup.object().shape({
-        
+      // const schema = await Yup.object().shape({
+
       //  nome: Yup.string()
       //    .required('O campo nome é obrigatório.'),
 
-       // email: Yup.string()
-       //   .email('Digite um email válido')
-       //   .required('O e-mail é obrigatório'),
+      // email: Yup.string()
+      //   .email('Digite um email válido')
+      //   .required('O e-mail é obrigatório'),
 
       //  senha: Yup.string()
       //    .min(6, 'A senha tem no minimo 6 caracteres')
-       //   .required('A senha é obrigatória'),
+      //   .required('A senha é obrigatória'),
 
-     // });
+      // });
 
 
-    //  await schema.validate(data, { abortEarly: false });
+      //  await schema.validate(data, { abortEarly: false });
       console.log('Cadastrando usuario')
       await api.post("usuarios", { nome, email, senha, phone });
 
@@ -133,18 +133,16 @@ export default function Cadastro({ navigation }) {
       const userId = responseUser.data[0].id;
 
       await api.post("enderecos", { cep, rua, numero, complemento, bairro, cidade, uf, pais, userId })
-      
+
       console.log('Endereço cadastrado')
 
       let headeBlobImage = "data:image/jpeg;base64,"
 
       let imageBase64 = headeBlobImage + imageBase64Blob;
 
-    
-     
-
       console.log('Cadastrando cliente')
-      const responseCliente =  await api.post("clientes", { userId, cpf, nome, imageBase64 });
+      
+      const responseCliente = await api.post("clientes", { userId, cpf, nome, imageBase64 });
 
       console.log(responseCliente.status)
 
@@ -152,7 +150,7 @@ export default function Cadastro({ navigation }) {
 
       const responseUserData = response.data;
 
-      dispatch({type: CLICK_UPDATE_VALUE, userState: responseUserData })
+      dispatch({ type: CLICK_UPDATE_VALUE, userState: responseUserData })
 
       console.log('Redirecionando para rota home user');
 

@@ -27,9 +27,16 @@ export default function Carrinho({ navigation }) {
 
   var date = new Date().getDate();
   var month = new Date().getMonth() + 1;
-  var year = new Date().getFullYear();;
+  var year = new Date().getFullYear();
+  
+  if(date < 10){
+    date = `0${date}`
+  }
 
+  console.log(date);
+ 
   const currentDate = `${year}-${month}-${date}`;
+
   var dataProdutos = '0';
 
   dataProdutos = useSelector(state => state.carrinhoState.carrinho.produtos);
@@ -49,7 +56,7 @@ export default function Carrinho({ navigation }) {
 
 
   const [pickerState, setPickerState] = useState('Credito');
-  const [dadosUsuario, setDadosUsuario] = useState({});
+  const [dadosUsuario, setDadosUsuario] = useState([ {bairro:'', uf:'',rua:'',numero:'', complemento:'' }]);
   const [dadosParceiro, setDadosParceiro] = useState([{
     idParceiro: '0'
   }]);
@@ -92,7 +99,9 @@ export default function Carrinho({ navigation }) {
   async function getDadosCliente() {
     await api.get(`clientes/${idCliente}`).then(res => {
       const dadosUsuario = res.data;
+      console.log(dadosUsuario);
       setDadosUsuario(dadosUsuario);
+      
     });
   }
 
@@ -310,10 +319,10 @@ export default function Carrinho({ navigation }) {
           </View>
 
           <Text style={styles.titleProdutos}>Entregar em:</Text>
-          <Text>Bairro: {dadosUsuario.bairro}, {dadosUsuario.uf}</Text>
-          <Text>Rua: {dadosUsuario.rua}</Text>
-          <Text>Número: {dadosUsuario.numero}</Text>
-          <Text>Complemento: {dadosUsuario.complemento}</Text>
+          <Text>Bairro: {dadosUsuario[0].bairro}, {dadosUsuario[0].uf}</Text>
+          <Text>Rua: {dadosUsuario[0].rua}</Text>
+          <Text>Número: {dadosUsuario[0].numero}</Text>
+          <Text>Complemento: {dadosUsuario[0].complemento}</Text>
 
           <Text style={styles.titleProdutos}>Informação Adicional </Text>
 

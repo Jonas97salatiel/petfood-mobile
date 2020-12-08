@@ -16,40 +16,36 @@ import { useSelector } from 'react-redux';
 
 export default function Pedidos({ navigation }) {
 
+useEffect(() => {
 
+  getData();
 
+},[])
 
   const [dataPedidos, setDataPedidos] = useState();
   const [idClienteTrue, setIdClienteTrue] = useState(null);
 
 
+
+
   var idCliente = useSelector(state => state.userState.userState.id);
 
-  async function getDataCliente() {
+ async function getData() {
 
-    await api.get(`clientes/${idCliente}`).then(res =>{
-      const dadosCliente = res.data[0].idCliente;
+    let dadosCliente;
+
+     await api.get(`clientes/${idCliente}`).then(res =>{
+      dadosCliente = res.data[0].idCliente;
+      console.log(dadosCliente);
       setIdClienteTrue(dadosCliente);
-    })
-  }
-  getDataCliente();
-  
-  
+    });
 
-  async function getDataPedidos() {
-
-    await api.get(`pedido/cliente/${idClienteTrue}`).then(res => {
+    await api.get(`pedido/cliente/${dadosCliente}`).then(res => {
       const dadosPedidos = res.data;
       setDataPedidos(dadosPedidos);
     });
+
   }
-
-  getDataPedidos();
-
-  function refreshDados(){
-    console.log('Atualizar dados')
-  }
-
 
 
 
@@ -72,7 +68,7 @@ export default function Pedidos({ navigation }) {
               name="refresh"
               size={26}
               color="#564848"
-              onPress={refreshDados()}
+              
             />
           </TouchableOpacity>
         </View>
